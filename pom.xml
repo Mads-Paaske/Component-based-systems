@@ -10,6 +10,12 @@
   <packaging>pom</packaging>
   <name>AsteroidsFXV2</name>
 
+  <modules>
+    <module>Core</module>
+    <module>Player</module>
+    <module>Asteroids</module>
+  </modules>
+
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.source>1.9</maven.compiler.source>
