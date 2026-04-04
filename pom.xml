@@ -14,6 +14,8 @@
     <module>Core</module>
     <module>Player</module>
     <module>Asteroids</module>
+    <module>Game</module>
+    <module>Engine</module>
   </modules>
 
   <properties>
@@ -24,7 +26,21 @@
 
   <dependencyManagement>
     <dependencies>
-      <!-- Add dependency versions here if needed -->
+      <dependency>
+        <groupId>org.openjfx</groupId>
+        <artifactId>javafx-controls</artifactId>
+        <version>21.0.2</version>
+      </dependency>
+      <dependency>
+        <groupId>org.openjfx</groupId>
+        <artifactId>javafx-graphics</artifactId>
+        <version>21.0.2</version>
+      </dependency>
+      <dependency>
+        <groupId>org.openjfx</groupId>
+        <artifactId>javafx-base</artifactId>
+        <version>21.0.2</version>
+      </dependency>
     </dependencies>
   </dependencyManagement>
 
@@ -44,24 +60,22 @@
       </plugin>
 
       <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+        <version>3.3.0</version> <configuration>
+        <outputDirectory>${maven.multiModuleProjectDirectory}/mods-mvn</outputDirectory>
+      </configuration>
+      </plugin>
+
+      <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>exec-maven-plugin</artifactId>
-        <version>3.5.0</version>
-        <executions>
-          <execution>
-            <goals>
-              <goal>exec</goal>
-            </goals>
-          </execution>
-        </executions>
+        <version>3.1.0</version>
         <configuration>
           <executable>java</executable>
-          <workingDirectory>.</workingDirectory>
           <arguments>
             <argument>--module-path=mods-mvn</argument>
-            <argument>--class-path=libs/*</argument>
-            <argument>-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=127.0.0.1:8000</argument>
-            <argument>--module=Core/dk.sdu.mmmi.cbse.main.Main</argument>
+            <argument>--module=Game/dk.sdu.cbse.game.GameApp</argument>
             <argument>--add-modules=javafx.graphics</argument>
           </arguments>
         </configuration>
@@ -107,28 +121,31 @@
       <build>
         <plugins>
           <plugin>
-            <artifactId>maven-dependency-plugin</artifactId>
-            <version>3.0.2</version>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>exec-maven-plugin</artifactId>
+            <version>3.1.0</version>
             <executions>
               <execution>
-                <id>copy-installed</id>
-                <phase>install</phase>
                 <goals>
-                  <goal>copy</goal>
+                  <goal>java</goal>
                 </goals>
-                <configuration>
-                  <artifactItems>
-                    <artifactItem>
-                      <groupId>${project.groupId}</groupId>
-                      <artifactId>${project.artifactId}</artifactId>
-                      <version>${project.version}</version>
-                      <type>jar</type>
-                    </artifactItem>
-                  </artifactItems>
-                  <outputDirectory>../mods-mvn</outputDirectory>
-                </configuration>
               </execution>
             </executions>
+            <configuration>
+              <mainClass>dk.sdu.cbse.game.GameApp</mainClass>
+              <cleanupDaemonThreads>false</cleanupDaemonThreads>
+              <classpathScope>compile</classpathScope>
+              <includePluginDependencies>true</includePluginDependencies>
+              <additionalClasspathElements>
+                <additionalClasspathElement>${project.basedir}/Game/target/classes</additionalClasspathElement>
+              </additionalClasspathElements>
+              <arguments>
+                <argument>--module-path</argument>
+                <argument>${project.basedir}/mods-mvn</argument>
+                <argument>--add-modules</argument>
+                <argument>javafx.controls,javafx.graphics</argument>
+              </arguments>
+            </configuration>
           </plugin>
         </plugins>
       </build>
