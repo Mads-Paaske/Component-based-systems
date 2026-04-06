@@ -11,11 +11,11 @@
   <name>AsteroidsFXV2</name>
 
   <modules>
-    <module>Core</module>
     <module>Player</module>
     <module>Asteroids</module>
     <module>Game</module>
     <module>Engine</module>
+    <module>Common</module>
   </modules>
 
   <properties>

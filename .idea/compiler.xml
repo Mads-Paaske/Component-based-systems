@@ -10,11 +10,11 @@
         <module name="Game" />
         <module name="Asteroids" />
         <module name="Engine" />
-        <module name="Core" />
+        <module name="Common" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="Common" target="9" />
+      <module name="Core" target="17" />
     </bytecodeTargetLevel>
   </component>
 </project>

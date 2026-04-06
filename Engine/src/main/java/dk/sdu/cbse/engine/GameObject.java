@@ -6,22 +6,25 @@ import java.util.List;
 
 public class GameObject {
 
-    private List<Component> components = new ArrayList<>();
+    private final List<Component> components = new ArrayList<>();
 
     public void addComponent(Component component) {
-        component.setGameObject(this);
         components.add(component);
+        component.start(this);
     }
 
-    public void update() {
+    public void update(double deltaTime) {
         for (Component c : components) {
-            c.update();
+            c.update(deltaTime);
         }
     }
 
-    public void render(GraphicsContext gc) {
+    public <T extends Component> T getComponent(Class<T> type) {
         for (Component c : components) {
-            c.render(gc);
+            if (type.isAssignableFrom(c.getClass())) {
+                return type.cast(c);
+            }
         }
+        return null;
     }
 }
