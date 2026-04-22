@@ -7,10 +7,10 @@
         <version>1.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>Player</artifactId>
+    <artifactId>Bullet</artifactId>
     <packaging>jar</packaging>
 
-    <name>Player</name>
+    <name>Bullet</name>
     <url>http://maven.apache.org</url>
 
     <properties>
@@ -26,6 +26,12 @@
         </dependency>
         <dependency>
             <groupId>dk.sdu.cbse</groupId>
+            <artifactId>Engine</artifactId>
+            <version>1.0-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>dk.sdu.cbse</groupId>
             <artifactId>Common</artifactId>
             <version>1.0-SNAPSHOT</version>
             <scope>compile</scope>
@@ -33,12 +39,6 @@
         <dependency>
             <groupId>dk.sdu.cbse</groupId>
             <artifactId>Asteroids</artifactId>
-            <version>1.0-SNAPSHOT</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>dk.sdu.cbse</groupId>
-            <artifactId>Bullet</artifactId>
             <version>1.0-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>

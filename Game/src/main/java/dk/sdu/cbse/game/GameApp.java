@@ -2,6 +2,7 @@ package dk.sdu.cbse.game;
 
 import dk.sdu.cbse.asteroid.AsteroidPlugin;
 import dk.sdu.cbse.asteroid.AsteroidProcessor;
+import dk.sdu.cbse.bullet.BulletProcessor;
 import dk.sdu.cbse.collision.CollisionProcessor;
 import dk.sdu.cbse.common.data.GameData;
 import dk.sdu.cbse.common.data.GameWorld;
@@ -49,6 +50,7 @@ public class GameApp extends Application {
         List<IEntityProcessingService> processors = new ArrayList<>();
         processors.add(new PlayerProcessor());      // handles input
         processors.add(new AsteroidProcessor());
+        processors.add(new BulletProcessor());
 
         RenderProcessor renderer = new RenderProcessor();
 
