@@ -16,6 +16,7 @@
     <module>Game</module>
     <module>Engine</module>
     <module>Common</module>
+    <module>Collision</module>
   </modules>
 
   <properties>

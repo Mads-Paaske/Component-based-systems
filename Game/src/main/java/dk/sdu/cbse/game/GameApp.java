@@ -1,5 +1,8 @@
 package dk.sdu.cbse.game;
 
+import dk.sdu.cbse.asteroid.AsteroidPlugin;
+import dk.sdu.cbse.asteroid.AsteroidProcessor;
+import dk.sdu.cbse.collision.CollisionProcessor;
 import dk.sdu.cbse.common.data.GameData;
 import dk.sdu.cbse.common.data.GameWorld;
 import dk.sdu.cbse.common.services.IEntityProcessingService;
@@ -38,10 +41,14 @@ public class GameApp extends Application {
         PlayerPlugin playerPlugin = new PlayerPlugin();
         playerPlugin.start(gameData, gameWorld);   // adds player to world
 
+        AsteroidPlugin asteroidPlugin = new AsteroidPlugin();
+        asteroidPlugin.start(gameData,gameWorld);
+
+
         // add processors (movement, rendering, etc.) manually
         List<IEntityProcessingService> processors = new ArrayList<>();
         processors.add(new PlayerProcessor());      // handles input
-        // add other processors if needed
+        processors.add(new AsteroidProcessor());
 
         RenderProcessor renderer = new RenderProcessor();
 
@@ -52,6 +59,8 @@ public class GameApp extends Application {
 
         List<IPostEntityProcessingService> postProcessors = new ArrayList<>();
         List<IGamePluginService> plugins = new ArrayList<>();
+
+        postProcessors.add(new CollisionProcessor());
 
         for (IGamePluginService plugin : plugins) {
             plugin.start(gameData, gameWorld);
@@ -78,6 +87,11 @@ public class GameApp extends Application {
                 // update processors
                 for (IEntityProcessingService processor : processors) {
                     processor.process(gameData, gameWorld);
+                }
+
+                // run postprocessors
+                for (IPostEntityProcessingService postProcessor : postProcessors) {
+                    postProcessor.process(gameData, gameWorld);
                 }
 
                 // render

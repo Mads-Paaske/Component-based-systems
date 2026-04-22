@@ -4,6 +4,8 @@ module Game {
     requires Engine;
     requires Common;
     requires Player;
+    requires Asteroids;
+    requires Collision;
 
     exports dk.sdu.cbse.game;
 }

@@ -7,10 +7,10 @@
         <version>1.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>Player</artifactId>
+    <artifactId>Collision</artifactId>
     <packaging>jar</packaging>
 
-    <name>Player</name>
+    <name>Collision</name>
     <url>http://maven.apache.org</url>
 
     <properties>
@@ -26,7 +26,13 @@
         </dependency>
         <dependency>
             <groupId>dk.sdu.cbse</groupId>
-            <artifactId>Common</artifactId>
+            <artifactId>Engine</artifactId>
+            <version>1.0-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>dk.sdu.cbse</groupId>
+            <artifactId>Player</artifactId>
             <version>1.0-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>
