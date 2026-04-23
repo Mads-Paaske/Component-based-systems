@@ -9,6 +9,8 @@ import dk.sdu.cbse.common.data.GameWorld;
 import dk.sdu.cbse.common.services.IEntityProcessingService;
 import dk.sdu.cbse.common.services.IGamePluginService;
 import dk.sdu.cbse.common.services.IPostEntityProcessingService;
+import dk.sdu.cbse.enemy.EnemyPlugin;
+import dk.sdu.cbse.enemy.EnemyProcessor;
 import dk.sdu.cbse.player.PlayerPlugin;
 import dk.sdu.cbse.player.PlayerProcessor;
 import javafx.animation.AnimationTimer;
@@ -45,12 +47,16 @@ public class GameApp extends Application {
         AsteroidPlugin asteroidPlugin = new AsteroidPlugin();
         asteroidPlugin.start(gameData,gameWorld);
 
+        EnemyPlugin enemyPlugin = new EnemyPlugin();
+        enemyPlugin.start(gameData,gameWorld);
+
 
         // add processors (movement, rendering, etc.) manually
         List<IEntityProcessingService> processors = new ArrayList<>();
         processors.add(new PlayerProcessor());      // handles input
         processors.add(new AsteroidProcessor());
         processors.add(new BulletProcessor());
+        processors.add(new EnemyProcessor());
 
         RenderProcessor renderer = new RenderProcessor();
 

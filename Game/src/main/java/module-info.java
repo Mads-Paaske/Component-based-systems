@@ -7,6 +7,7 @@ module Game {
     requires Asteroids;
     requires Collision;
     requires Bullet;
+    requires Enemy;
 
     exports dk.sdu.cbse.game;
 }

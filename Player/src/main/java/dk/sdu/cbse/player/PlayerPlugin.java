@@ -13,8 +13,8 @@ public class PlayerPlugin implements IGamePluginService {
         GameObject player = new GameObject();
 
         TransformComponent transform = new TransformComponent();
-        transform.x = gameData.getDisplayWidth() / 2;
-        transform.y = gameData.getDisplayHeight() / 2;
+        transform.x = (double) gameData.getDisplayWidth() / 2;
+        transform.y = (double) gameData.getDisplayHeight() / 2;
 
         player.addComponent(transform);
         player.addComponent(new VelocityComponent());
@@ -22,7 +22,7 @@ public class PlayerPlugin implements IGamePluginService {
         RenderComponent render = new RenderComponent();
         render.shape = RenderComponent.Shape.TRIANGLE;
         render.size = 20;
-        render.color = "RED";
+        render.color = "GREEN";
         player.addComponent(render);
 
         gameWorld.addObject(player);

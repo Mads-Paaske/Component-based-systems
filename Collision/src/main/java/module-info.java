@@ -4,6 +4,7 @@ module Collision {
     requires Engine;
     requires Player;
     requires Bullet;
+    requires Enemy;
 
     exports dk.sdu.cbse.collision;
 }

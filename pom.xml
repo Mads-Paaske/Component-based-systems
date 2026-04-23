@@ -18,6 +18,7 @@
     <module>Common</module>
     <module>Collision</module>
     <module>Bullet</module>
+    <module>Enemy</module>
   </modules>
 
   <properties>
