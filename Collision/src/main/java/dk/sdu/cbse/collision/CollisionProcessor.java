@@ -1,5 +1,6 @@
 package dk.sdu.cbse.collision;
 
+import dk.sdu.cbse.asteroid.AsteroidComponent;
 import dk.sdu.cbse.common.data.GameData;
 import dk.sdu.cbse.common.data.GameWorld;
 import dk.sdu.cbse.common.services.IPostEntityProcessingService;
@@ -18,6 +19,7 @@ public class CollisionProcessor implements IPostEntityProcessingService {
     public void process(GameData gameData, GameWorld world) {
 
         List<GameObject> toRemove = new ArrayList<>();
+        List<GameObject> toAdd = new ArrayList<>();
 
         GameObject player = null;
 
@@ -74,7 +76,7 @@ public class CollisionProcessor implements IPostEntityProcessingService {
 
                 if (distance < (bR.size + aR.size) / 2) {
                     toRemove.add(bullet);
-                    toRemove.add(asteroid);
+                    splitAsteroid(asteroid, toAdd, toRemove);
                     System.out.println("Asteroid destroyed!");
                 }
             }
@@ -138,5 +140,59 @@ public class CollisionProcessor implements IPostEntityProcessingService {
         for (GameObject e : toRemove) {
             world.removeObject(e);
         }
+        // Add after loop
+        for (GameObject obj : toAdd) {
+            world.addObject(obj);
+        }
+    }
+    private void splitAsteroid(GameObject asteroid,
+                               List<GameObject> toAdd,
+                               List<GameObject> toRemove) {
+
+        AsteroidComponent ac = asteroid.getComponent(AsteroidComponent.class);
+
+        // always remove original asteroid
+        toRemove.add(asteroid);
+
+        // if too small → just destroy
+        if (ac == null || ac.level <= 1) {
+            System.out.println("Asteroid destroyed!");
+            return;
+        }
+
+        TransformComponent t = asteroid.getComponent(TransformComponent.class);
+        VelocityComponent v = asteroid.getComponent(VelocityComponent.class);
+        RenderComponent r = asteroid.getComponent(RenderComponent.class);
+
+        for (int i = 0; i < 2; i++) {
+
+            GameObject child = new GameObject();
+
+            TransformComponent nt = new TransformComponent();
+            nt.x = t.x;
+            nt.y = t.y;
+
+            VelocityComponent nv = new VelocityComponent();
+            nv.dx = v.dx + (Math.random() - 0.5) * 100;
+            nv.dy = v.dy + (Math.random() - 0.5) * 100;
+
+            RenderComponent nr = new RenderComponent();
+            nr.shape = RenderComponent.Shape.CIRCLE;
+            nr.color = "GRAY";
+            nr.size = r.size * 0.6;
+
+            AsteroidComponent nac = new AsteroidComponent();
+            nac.level = ac.level - 1;
+
+            child.addComponent(nt);
+            child.addComponent(nv);
+            child.addComponent(nr);
+            child.addComponent(nac);
+            child.addComponent(new AsteroidTag());
+
+            toAdd.add(child);
+        }
+
+        System.out.println("Asteroid split!");
     }
 }

@@ -11,6 +11,8 @@ public class AsteroidPlugin implements IGamePluginService {
 
     private final Random random = new Random();
 
+    public int size; // 3 = big, 2 = medium, 1 = small
+
     @Override
     public void start(GameData gameData, GameWorld world) {
 
@@ -28,12 +30,17 @@ public class AsteroidPlugin implements IGamePluginService {
 
             RenderComponent render = new RenderComponent();
             render.shape = RenderComponent.Shape.CIRCLE;
+
+            AsteroidComponent asteroidComponent = new AsteroidComponent();
+            asteroidComponent.level = 3;
+
             render.size = 30;
             render.color = "GRAY";
 
             asteroid.addComponent(transform);
             asteroid.addComponent(velocity);
             asteroid.addComponent(render);
+            asteroid.addComponent(asteroidComponent);
             asteroid.addComponent(new AsteroidTag());
 
             world.addObject(asteroid);
