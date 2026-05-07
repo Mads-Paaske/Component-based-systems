@@ -61,18 +61,25 @@ public class EnemyProcessor implements IEntityProcessingService {
                     GameObject bullet = new GameObject();
 
                     TransformComponent t = new TransformComponent();
-                    t.x = transform.x;
-                    t.y = transform.y;
-                    t.rotation = transform.rotation;
-
+                    RenderComponent r = new RenderComponent();
                     VelocityComponent v = new VelocityComponent();
+
+                    double rad = Math.toRadians(transform.rotation);
+
+                    double dirX = Math.sin(rad);
+                    double dirY = -Math.cos(rad);
+
+                    double offset = 20;
                     double speed = 400;
 
-                    double angleRad = Math.toRadians(transform.rotation);
-                    v.dx = Math.sin(angleRad) * speed;
-                    v.dy = -Math.cos(angleRad) * speed;
+                    // spawn in front of enemy
+                    t.x = transform.x + dirX * offset;
+                    t.y = transform.y + dirY * offset;
+                    t.rotation = transform.rotation;
 
-                    RenderComponent r = new RenderComponent();
+                    v.dx = dirX * speed;
+                    v.dy = dirY * speed;
+
                     r.size = 5;
                     r.color = "BLUE";
 

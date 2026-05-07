@@ -16,7 +16,7 @@ public class AsteroidPlugin implements IGamePluginService {
     @Override
     public void start(GameData gameData, GameWorld world) {
 
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 1; i++) {
 
             GameObject asteroid = new GameObject();
 

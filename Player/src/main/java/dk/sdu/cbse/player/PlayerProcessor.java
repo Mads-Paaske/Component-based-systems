@@ -61,7 +61,7 @@ public class PlayerProcessor implements IEntityProcessingService {
                     double offset = 20;
                     double speed = 400;
 
-                    // spawn in front of player (IMPORTANT FIX)
+                    // spawn in front of player
                     t.x = transform.x + dirX * offset;
                     t.y = transform.y + dirY * offset;
                     t.rotation = transform.rotation;
