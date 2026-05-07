@@ -1,7 +1,7 @@
 module Bullet {
     requires Engine;
     requires Common;
-    requires Asteroids;
 
-    exports dk.sdu.cbse.bullet;
+    provides dk.sdu.cbse.common.services.IEntityProcessingService
+            with dk.sdu.cbse.bullet.BulletProcessor;
 }

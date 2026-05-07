@@ -1,34 +1,37 @@
 package dk.sdu.cbse.game;
 
-import dk.sdu.cbse.asteroid.AsteroidPlugin;
-import dk.sdu.cbse.asteroid.AsteroidProcessor;
-import dk.sdu.cbse.bullet.BulletProcessor;
-import dk.sdu.cbse.collision.CollisionProcessor;
 import dk.sdu.cbse.common.data.GameData;
 import dk.sdu.cbse.common.data.GameWorld;
 import dk.sdu.cbse.common.services.IEntityProcessingService;
 import dk.sdu.cbse.common.services.IGamePluginService;
 import dk.sdu.cbse.common.services.IPostEntityProcessingService;
-import dk.sdu.cbse.enemy.EnemyPlugin;
-import dk.sdu.cbse.enemy.EnemyProcessor;
-import dk.sdu.cbse.player.PlayerPlugin;
-import dk.sdu.cbse.player.PlayerProcessor;
+
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.control.Label;
 import javafx.stage.Stage;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ServiceLoader;
 
 public class GameApp extends Application {
+
+    private final GameData gameData = new GameData();
+    private final GameWorld gameWorld = new GameWorld();
+
+    private final List<IEntityProcessingService> processors = new ArrayList<>();
+    private final List<IPostEntityProcessingService> postProcessors = new ArrayList<>();
+    private final List<IGamePluginService> plugins = new ArrayList<>();
+
     @Override
     public void start(Stage primaryStage) {
+
         primaryStage.setTitle("AsteroidsFX");
+
         Canvas canvas = new Canvas(800, 600);
         GraphicsContext gc = canvas.getGraphicsContext2D();
 
@@ -37,67 +40,73 @@ public class GameApp extends Application {
         primaryStage.setScene(scene);
         primaryStage.show();
 
-        GameData gameData = new GameData();
-        GameWorld gameWorld = new GameWorld();
-
-        // create plugin instance
-        PlayerPlugin playerPlugin = new PlayerPlugin();
-        playerPlugin.start(gameData, gameWorld);   // adds player to world
-
-        AsteroidPlugin asteroidPlugin = new AsteroidPlugin();
-        asteroidPlugin.start(gameData,gameWorld);
-
-        EnemyPlugin enemyPlugin = new EnemyPlugin();
-        enemyPlugin.start(gameData,gameWorld);
-
-
-        // add processors (movement, rendering, etc.) manually
-        List<IEntityProcessingService> processors = new ArrayList<>();
-        processors.add(new PlayerProcessor());      // handles input
-        processors.add(new AsteroidProcessor());
-        processors.add(new BulletProcessor());
-        processors.add(new EnemyProcessor());
-
-        RenderProcessor renderer = new RenderProcessor();
-
-        scene.setOnKeyPressed(e -> gameData.getKeys().press(e.getCode().toString()));
-        scene.setOnKeyReleased(e -> gameData.getKeys().release(e.getCode().toString()));
-
         gameData.setGraphicsContext(gc);
 
-        List<IPostEntityProcessingService> postProcessors = new ArrayList<>();
-        List<IGamePluginService> plugins = new ArrayList<>();
+        // keyboard input
+        scene.setOnKeyPressed(
+                e -> gameData.getKeys().press(e.getCode().toString())
+        );
 
-        postProcessors.add(new CollisionProcessor());
+        scene.setOnKeyReleased(
+                e -> gameData.getKeys().release(e.getCode().toString())
+        );
 
-        for (IGamePluginService plugin : plugins) {
+        // LOAD GAME PLUGINS
+        for (IGamePluginService plugin :
+                ServiceLoader.load(IGamePluginService.class)) {
+
+            plugins.add(plugin);
             plugin.start(gameData, gameWorld);
         }
 
+        // LOAD ENTITY PROCESSORS
+        for (IEntityProcessingService processor :
+                ServiceLoader.load(IEntityProcessingService.class)) {
+
+            processors.add(processor);
+        }
+
+        // LOAD POST PROCESSORS
+        for (IPostEntityProcessingService postProcessor :
+                ServiceLoader.load(IPostEntityProcessingService.class)) {
+
+            postProcessors.add(postProcessor);
+        }
+
+        RenderProcessor renderer = new RenderProcessor();
+
         new AnimationTimer() {
+
             private long last = 0;
 
             @Override
             public void handle(long now) {
-
-                gc.clearRect(0, 0, gameData.getDisplayWidth(), gameData.getDisplayHeight());
 
                 if (last == 0) {
                     last = now;
                     return;
                 }
 
-                double delta = (now - last) / 1_000_000_000.0;
+                double delta =
+                        (now - last) / 1_000_000_000.0;
+
                 last = now;
 
                 gameData.setDelta(delta);
 
-                // update processors
+                gc.clearRect(
+                        0,
+                        0,
+                        gameData.getDisplayWidth(),
+                        gameData.getDisplayHeight()
+                );
+
+                // processors
                 for (IEntityProcessingService processor : processors) {
                     processor.process(gameData, gameWorld);
                 }
 
-                // run postprocessors
+                // post processors
                 for (IPostEntityProcessingService postProcessor : postProcessors) {
                     postProcessor.process(gameData, gameWorld);
                 }

@@ -1,6 +1,6 @@
 package dk.sdu.cbse.player;
 
-import dk.sdu.cbse.bullet.BulletTag;
+import dk.sdu.cbse.engine.BulletTag;
 import dk.sdu.cbse.common.data.GameData;
 import dk.sdu.cbse.common.data.GameWorld;
 import dk.sdu.cbse.common.services.IEntityProcessingService;
@@ -23,7 +23,7 @@ public class PlayerProcessor implements IEntityProcessingService {
 
         for (GameObject entity : gameWorld.getObjects()) {
 
-            if (entity.getComponent(PlayerTag.class) != null) {
+            if (entity.getComponent(dk.sdu.cbse.engine.PlayerTag.class) != null) {
 
                 TransformComponent transform = entity.getComponent(TransformComponent.class);
                 VelocityComponent velocity = entity.getComponent(VelocityComponent.class);
@@ -79,9 +79,6 @@ public class PlayerProcessor implements IEntityProcessingService {
 
                     toAdd.add(bullet);
                 }
-                // update position
-                transform.x += velocity.dx * gameData.getDelta();
-                transform.y += velocity.dy * gameData.getDelta();
 
                 // optional friction to slow down over time
                 velocity.dx *= friction;

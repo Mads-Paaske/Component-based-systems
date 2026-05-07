@@ -8,8 +8,4 @@ public class RenderComponent implements Component {
     public double size = 10;
     public String color = "BLACK";
 
-    @Override
-    public void start(GameObject gameObject) {}
-    @Override
-    public void update(double deltaTime) {}
 }

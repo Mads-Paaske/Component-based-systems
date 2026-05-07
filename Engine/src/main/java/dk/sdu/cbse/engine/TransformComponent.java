@@ -4,8 +4,4 @@ public class TransformComponent implements Component {
     public double x, y;
     public double rotation;
 
-    @Override
-    public void start(GameObject gameObject) {}
-    @Override
-    public void update(double deltaTime) {}
 }

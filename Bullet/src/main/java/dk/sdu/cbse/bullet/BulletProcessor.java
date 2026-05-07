@@ -1,10 +1,11 @@
 package dk.sdu.cbse.bullet;
 
-import dk.sdu.cbse.asteroid.AsteroidTag;
 import dk.sdu.cbse.common.data.GameData;
 import dk.sdu.cbse.common.data.GameWorld;
 import dk.sdu.cbse.common.services.IEntityProcessingService;
-import dk.sdu.cbse.engine.*;
+import dk.sdu.cbse.engine.BulletTag;
+import dk.sdu.cbse.engine.GameObject;
+import dk.sdu.cbse.engine.TransformComponent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,23 +19,18 @@ public class BulletProcessor implements IEntityProcessingService {
 
         for (GameObject entity : world.getObjects()) {
 
-            if (entity.getComponent(BulletTag.class) != null) {
+            if (entity.getComponent(BulletTag.class) == null) continue;
 
-                TransformComponent t = entity.getComponent(TransformComponent.class);
-                VelocityComponent v = entity.getComponent(VelocityComponent.class);
+            TransformComponent t =
+                    entity.getComponent(TransformComponent.class);
 
-                if (t == null || v == null) continue;
+            if (t == null) continue;
 
-                // move bullet
-                t.x += v.dx * gameData.getDelta();
-                t.y += v.dy * gameData.getDelta();
+            // ONLY removal logic
+            if (t.x < 0 || t.x > gameData.getDisplayWidth()
+                    || t.y < 0 || t.y > gameData.getDisplayHeight()) {
 
-                // remove if off screen
-                if (t.x < 0 || t.x > gameData.getDisplayWidth()
-                        || t.y < 0 || t.y > gameData.getDisplayHeight()) {
-
-                    toRemove.add(entity);
-                }
+                toRemove.add(entity);
             }
         }
 

@@ -1,6 +1,5 @@
 package dk.sdu.cbse.engine;
 
-import javafx.scene.canvas.GraphicsContext;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,13 +9,6 @@ public class GameObject {
 
     public void addComponent(Component component) {
         components.add(component);
-        component.start(this);
-    }
-
-    public void update(double deltaTime) {
-        for (Component c : components) {
-            c.update(deltaTime);
-        }
     }
 
     public <T extends Component> T getComponent(Class<T> type) {

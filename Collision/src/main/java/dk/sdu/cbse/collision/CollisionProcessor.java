@@ -1,14 +1,9 @@
 package dk.sdu.cbse.collision;
 
-import dk.sdu.cbse.asteroid.AsteroidComponent;
 import dk.sdu.cbse.common.data.GameData;
 import dk.sdu.cbse.common.data.GameWorld;
 import dk.sdu.cbse.common.services.IPostEntityProcessingService;
-import dk.sdu.cbse.enemy.EnemyTag;
 import dk.sdu.cbse.engine.*;
-import dk.sdu.cbse.player.PlayerTag;
-import dk.sdu.cbse.asteroid.AsteroidTag;
-import dk.sdu.cbse.bullet.BulletTag;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,34 +16,16 @@ public class CollisionProcessor implements IPostEntityProcessingService {
         List<GameObject> toRemove = new ArrayList<>();
         List<GameObject> toAdd = new ArrayList<>();
 
-        GameObject player = null;
-
-        // Find player
-        for (GameObject e : world.getObjects()) {
-            if (e.getComponent(PlayerTag.class) != null) {
-                player = e;
-                break;
-            }
-        }
+        List<GameObject> players = getEntities(world, PlayerTag.class);
+        List<GameObject> bullets = getEntities(world, BulletTag.class);
+        List<GameObject> asteroids = getEntities(world, AsteroidTag.class);
+        List<GameObject> enemies = getEntities(world, EnemyTag.class);
 
         // Player vs Asteroid
-        if (player != null) {
+        for (GameObject player : players) {
+            for (GameObject asteroid : asteroids) {
 
-            TransformComponent pT = player.getComponent(TransformComponent.class);
-            RenderComponent pR = player.getComponent(RenderComponent.class);
-
-            for (GameObject asteroid : world.getObjects()) {
-
-                if (asteroid.getComponent(AsteroidTag.class) == null) continue;
-
-                TransformComponent aT = asteroid.getComponent(TransformComponent.class);
-                RenderComponent aR = asteroid.getComponent(RenderComponent.class);
-
-                double dx = pT.x - aT.x;
-                double dy = pT.y - aT.y;
-                double distance = Math.sqrt(dx * dx + dy * dy);
-
-                if (distance < (pR.size + aR.size) / 2) {
+                if (collides(player, asteroid)) {
                     toRemove.add(player);
                     System.out.println("Player died!");
                 }
@@ -56,113 +33,142 @@ public class CollisionProcessor implements IPostEntityProcessingService {
         }
 
         // Bullet vs Asteroid
-        for (GameObject bullet : world.getObjects()) {
+        for (GameObject bullet : bullets) {
+            for (GameObject asteroid : asteroids) {
 
-            if (bullet.getComponent(BulletTag.class) == null) continue;
+                if (collides(bullet, asteroid)) {
 
-            TransformComponent bT = bullet.getComponent(TransformComponent.class);
-            RenderComponent bR = bullet.getComponent(RenderComponent.class);
-
-            for (GameObject asteroid : world.getObjects()) {
-
-                if (asteroid.getComponent(AsteroidTag.class) == null) continue;
-
-                TransformComponent aT = asteroid.getComponent(TransformComponent.class);
-                RenderComponent aR = asteroid.getComponent(RenderComponent.class);
-
-                double dx = bT.x - aT.x;
-                double dy = bT.y - aT.y;
-                double distance = Math.sqrt(dx * dx + dy * dy);
-
-                if (distance < (bR.size + aR.size) / 2) {
                     toRemove.add(bullet);
+
                     splitAsteroid(asteroid, toAdd, toRemove);
+
                     System.out.println("Asteroid destroyed!");
                 }
             }
         }
 
         // Bullet vs Enemy
-        for (GameObject bullet : world.getObjects()) {
+        for (GameObject bullet : bullets) {
+            for (GameObject enemy : enemies) {
 
-            if (bullet.getComponent(BulletTag.class) == null) continue;
+                if (collides(bullet, enemy)) {
 
-            TransformComponent bT = bullet.getComponent(TransformComponent.class);
-            RenderComponent bR = bullet.getComponent(RenderComponent.class);
-
-            for (GameObject enemy : world.getObjects()) {
-
-                if (enemy.getComponent(EnemyTag.class) == null) continue;
-
-                TransformComponent aT = enemy.getComponent(TransformComponent.class);
-                RenderComponent aR = enemy.getComponent(RenderComponent.class);
-
-                double dx = bT.x - aT.x;
-                double dy = bT.y - aT.y;
-                double distance = Math.sqrt(dx * dx + dy * dy);
-
-                if (distance < (bR.size + aR.size) / 2) {
                     toRemove.add(bullet);
                     toRemove.add(enemy);
+
                     System.out.println("Enemy destroyed!");
                 }
             }
         }
 
         // Bullet vs Player
-        for (GameObject bullet : world.getObjects()) {
+        for (GameObject bullet : bullets) {
+            for (GameObject player : players) {
 
-            if (bullet.getComponent(BulletTag.class) == null) continue;
+                if (collides(bullet, player)) {
 
-            TransformComponent bT = bullet.getComponent(TransformComponent.class);
-            RenderComponent bR = bullet.getComponent(RenderComponent.class);
-
-            for (GameObject players : world.getObjects()) {
-
-                if (players.getComponent(PlayerTag.class) == null) continue;
-
-                TransformComponent aT = players.getComponent(TransformComponent.class);
-                RenderComponent aR = players.getComponent(RenderComponent.class);
-
-                double dx = bT.x - aT.x;
-                double dy = bT.y - aT.y;
-                double distance = Math.sqrt(dx * dx + dy * dy);
-
-                if (distance < (bR.size + aR.size) / 2) {
                     toRemove.add(bullet);
-                    toRemove.add(players);
+                    toRemove.add(player);
+
                     System.out.println("Player destroyed!");
                 }
             }
         }
 
-        // Remove after loop
+        // Player vs Enemy
+        for (GameObject player : players) {
+            for (GameObject enemy : enemies) {
+
+                if (collides(player, enemy)) {
+                    toRemove.add(player);
+                    System.out.println("Player died!");
+                }
+            }
+        }
+
+        // Asteroid vs Enemy
+        for (GameObject asteroid : asteroids) {
+            for (GameObject enemy : enemies) {
+
+                if (collides(asteroid, enemy)) {
+                    toRemove.add(asteroid);
+                    System.out.println("Player died!");
+                }
+            }
+        }
+
+
+        // remove entities
         for (GameObject e : toRemove) {
             world.removeObject(e);
         }
-        // Add after loop
-        for (GameObject obj : toAdd) {
-            world.addObject(obj);
+
+        // add new entities
+        for (GameObject e : toAdd) {
+            world.addObject(e);
         }
     }
-    private void splitAsteroid(GameObject asteroid,
-                               List<GameObject> toAdd,
-                               List<GameObject> toRemove) {
 
-        AsteroidComponent ac = asteroid.getComponent(AsteroidComponent.class);
+    private boolean collides(GameObject a, GameObject b) {
 
-        // always remove original asteroid
+        TransformComponent aT = a.getComponent(TransformComponent.class);
+        TransformComponent bT = b.getComponent(TransformComponent.class);
+
+        RenderComponent aR = a.getComponent(RenderComponent.class);
+        RenderComponent bR = b.getComponent(RenderComponent.class);
+
+        if (aT == null || bT == null || aR == null || bR == null) {
+            return false;
+        }
+
+        double dx = aT.x - bT.x;
+        double dy = aT.y - bT.y;
+
+        double distance = Math.sqrt(dx * dx + dy * dy);
+
+        return distance < (aR.size + bR.size) / 2;
+    }
+
+    private List<GameObject> getEntities(
+            GameWorld world,
+            Class<? extends Component> componentClass
+    ) {
+
+        List<GameObject> result = new ArrayList<>();
+
+        for (GameObject entity : world.getObjects()) {
+
+            if (entity.getComponent(componentClass) != null) {
+                result.add(entity);
+            }
+        }
+
+        return result;
+    }
+
+    private void splitAsteroid(
+            GameObject asteroid,
+            List<GameObject> toAdd,
+            List<GameObject> toRemove
+    ) {
+
+        AsteroidComponent ac =
+                asteroid.getComponent(AsteroidComponent.class);
+
         toRemove.add(asteroid);
 
-        // if too small → just destroy
         if (ac == null || ac.level <= 1) {
-            System.out.println("Asteroid destroyed!");
             return;
         }
 
-        TransformComponent t = asteroid.getComponent(TransformComponent.class);
-        VelocityComponent v = asteroid.getComponent(VelocityComponent.class);
-        RenderComponent r = asteroid.getComponent(RenderComponent.class);
+        TransformComponent t =
+                asteroid.getComponent(TransformComponent.class);
+
+        VelocityComponent v =
+                asteroid.getComponent(VelocityComponent.class);
+
+        RenderComponent r =
+                asteroid.getComponent(RenderComponent.class);
 
         for (int i = 0; i < 2; i++) {
 
@@ -187,6 +193,7 @@ public class CollisionProcessor implements IPostEntityProcessingService {
             child.addComponent(nt);
             child.addComponent(nv);
             child.addComponent(nr);
+
             child.addComponent(nac);
             child.addComponent(new AsteroidTag());
 

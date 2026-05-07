@@ -36,7 +36,7 @@ public class EnemyPlugin implements IGamePluginService{
         enemy.addComponent(velocityComponent);
         enemy.addComponent(transformComponent);
         enemy.addComponent(renderComponent);
-        enemy.addComponent(new EnemyTag());
+        enemy.addComponent(new dk.sdu.cbse.engine.EnemyTag());
 
         gameWorld.addObject(enemy);
     }

@@ -1,10 +1,8 @@
 module Collision {
-    requires Asteroids;
+
     requires Common;
     requires Engine;
-    requires Player;
-    requires Bullet;
-    requires Enemy;
 
-    exports dk.sdu.cbse.collision;
+    provides dk.sdu.cbse.common.services.IPostEntityProcessingService
+            with dk.sdu.cbse.collision.CollisionProcessor;
 }
