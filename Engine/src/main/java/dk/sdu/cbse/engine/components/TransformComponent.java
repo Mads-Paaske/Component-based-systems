@@ -1,4 +1,4 @@
-package dk.sdu.cbse.engine;
+package dk.sdu.cbse.engine.components;
 
 public class TransformComponent implements Component {
     public double x, y;

@@ -4,8 +4,8 @@ import dk.sdu.cbse.common.data.GameData;
 import dk.sdu.cbse.common.data.GameWorld;
 import dk.sdu.cbse.common.services.IEntityProcessingService;
 import dk.sdu.cbse.engine.GameObject;
-import dk.sdu.cbse.engine.TransformComponent;
-import dk.sdu.cbse.engine.VelocityComponent;
+import dk.sdu.cbse.engine.components.TransformComponent;
+import dk.sdu.cbse.engine.components.VelocityComponent;
 
 public class MovementProcessor implements IEntityProcessingService {
 

@@ -5,8 +5,9 @@ import dk.sdu.cbse.common.data.GameData;
 import dk.sdu.cbse.common.data.GameWorld;
 import dk.sdu.cbse.common.services.IEntityProcessingService;
 import dk.sdu.cbse.engine.GameObject;
-import dk.sdu.cbse.engine.TransformComponent;
-import dk.sdu.cbse.engine.VelocityComponent;
+import dk.sdu.cbse.engine.components.TransformComponent;
+import dk.sdu.cbse.engine.components.VelocityComponent;
+import dk.sdu.cbse.engine.tags.PlayerTag;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +24,7 @@ public class PlayerProcessor implements IEntityProcessingService {
 
         for (GameObject entity : gameWorld.getObjects()) {
 
-            if (entity.getComponent(dk.sdu.cbse.engine.PlayerTag.class) != null) {
+            if (entity.getComponent(PlayerTag.class) != null) {
 
                 TransformComponent transform = entity.getComponent(TransformComponent.class);
                 VelocityComponent velocity = entity.getComponent(VelocityComponent.class);

@@ -5,8 +5,9 @@ import dk.sdu.cbse.common.data.GameData;
 import dk.sdu.cbse.common.data.GameWorld;
 import dk.sdu.cbse.common.services.IEntityProcessingService;
 import dk.sdu.cbse.engine.GameObject;
-import dk.sdu.cbse.engine.TransformComponent;
-import dk.sdu.cbse.engine.VelocityComponent;
+import dk.sdu.cbse.engine.components.TransformComponent;
+import dk.sdu.cbse.engine.components.VelocityComponent;
+import dk.sdu.cbse.engine.tags.EnemyTag;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +26,7 @@ public class EnemyProcessor implements IEntityProcessingService {
 
         for (GameObject entity : gameWorld.getObjects())
         {
-            if (entity.getComponent(dk.sdu.cbse.engine.EnemyTag.class) != null)
+            if (entity.getComponent(EnemyTag.class) != null)
             {
                 double rotationSpeed = 180; // degrees/sec
                 double thrust = 200;        // pixels/sec^2

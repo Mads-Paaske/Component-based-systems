@@ -1,5 +1,7 @@
 package dk.sdu.cbse.engine;
 
+import dk.sdu.cbse.engine.components.Component;
+
 import java.util.ArrayList;
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package dk.sdu.cbse.engine;
+package dk.sdu.cbse.engine.components;
 
 public class VelocityComponent implements Component {
     public double dx = 0;

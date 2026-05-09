@@ -5,6 +5,13 @@ import dk.sdu.cbse.common.data.GameWorld;
 import dk.sdu.cbse.common.services.IPostEntityProcessingService;
 import dk.sdu.cbse.engine.*;
 import dk.sdu.cbse.common.services.AsteroidSplitterSPI;
+import dk.sdu.cbse.engine.components.Component;
+import dk.sdu.cbse.engine.components.RenderComponent;
+import dk.sdu.cbse.engine.components.TransformComponent;
+import dk.sdu.cbse.engine.tags.AsteroidTag;
+import dk.sdu.cbse.engine.tags.BulletTag;
+import dk.sdu.cbse.engine.tags.EnemyTag;
+import dk.sdu.cbse.engine.tags.PlayerTag;
 
 import java.util.ServiceLoader;
 

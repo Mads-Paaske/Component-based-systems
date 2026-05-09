@@ -1,4 +1,4 @@
-package dk.sdu.cbse.engine;
+package dk.sdu.cbse.engine.components;
 
 public class RenderComponent implements Component {
 

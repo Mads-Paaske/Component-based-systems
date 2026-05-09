@@ -3,8 +3,8 @@ package dk.sdu.cbse.game;
 import dk.sdu.cbse.common.data.GameData;
 import dk.sdu.cbse.common.data.GameWorld;
 import dk.sdu.cbse.engine.GameObject;
-import dk.sdu.cbse.engine.RenderComponent;
-import dk.sdu.cbse.engine.TransformComponent;
+import dk.sdu.cbse.engine.components.RenderComponent;
+import dk.sdu.cbse.engine.components.TransformComponent;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Paint;
 

@@ -3,9 +3,9 @@ package dk.sdu.cbse.bullet;
 import dk.sdu.cbse.common.data.GameData;
 import dk.sdu.cbse.common.data.GameWorld;
 import dk.sdu.cbse.common.services.IEntityProcessingService;
-import dk.sdu.cbse.engine.BulletTag;
+import dk.sdu.cbse.engine.tags.BulletTag;
 import dk.sdu.cbse.engine.GameObject;
-import dk.sdu.cbse.engine.TransformComponent;
+import dk.sdu.cbse.engine.components.TransformComponent;
 
 import java.util.ArrayList;
 import java.util.List;

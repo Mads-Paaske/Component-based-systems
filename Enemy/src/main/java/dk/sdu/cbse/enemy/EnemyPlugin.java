@@ -4,6 +4,11 @@ import dk.sdu.cbse.common.data.GameData;
 import dk.sdu.cbse.common.data.GameWorld;
 import dk.sdu.cbse.common.services.IGamePluginService;
 import dk.sdu.cbse.engine.*;
+import dk.sdu.cbse.engine.components.RenderComponent;
+import dk.sdu.cbse.engine.components.TransformComponent;
+import dk.sdu.cbse.engine.components.VelocityComponent;
+import dk.sdu.cbse.engine.components.WrapComponent;
+import dk.sdu.cbse.engine.tags.EnemyTag;
 
 import java.util.Random;
 
