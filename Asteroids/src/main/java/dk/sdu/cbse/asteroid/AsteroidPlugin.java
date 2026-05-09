@@ -42,6 +42,7 @@ public class AsteroidPlugin implements IGamePluginService {
             asteroid.addComponent(render);
             asteroid.addComponent(asteroidComponent);
             asteroid.addComponent(new AsteroidTag());
+            asteroid.addComponent(new WrapComponent());
 
             world.addObject(asteroid);
         }

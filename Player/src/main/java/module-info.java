@@ -1,7 +1,7 @@
 module Player {
+    uses dk.sdu.cbse.common.services.BulletSPI;
     requires Common;
     requires Engine;
-    requires Bullet;
 
     provides dk.sdu.cbse.common.services.IGamePluginService
             with dk.sdu.cbse.player.PlayerPlugin;

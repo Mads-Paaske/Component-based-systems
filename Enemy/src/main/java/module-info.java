@@ -2,7 +2,6 @@ module Enemy {
     requires java.desktop;
     requires Engine;
     requires Common;
-    requires Bullet;
 
     provides dk.sdu.cbse.common.services.IGamePluginService
             with dk.sdu.cbse.enemy.EnemyPlugin;

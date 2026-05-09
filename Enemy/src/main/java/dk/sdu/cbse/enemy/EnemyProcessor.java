@@ -1,16 +1,16 @@
 package dk.sdu.cbse.enemy;
 
-import dk.sdu.cbse.engine.BulletTag;
+import dk.sdu.cbse.common.services.BulletSPI;
 import dk.sdu.cbse.common.data.GameData;
 import dk.sdu.cbse.common.data.GameWorld;
 import dk.sdu.cbse.common.services.IEntityProcessingService;
 import dk.sdu.cbse.engine.GameObject;
-import dk.sdu.cbse.engine.RenderComponent;
 import dk.sdu.cbse.engine.TransformComponent;
 import dk.sdu.cbse.engine.VelocityComponent;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ServiceLoader;
 
 public class EnemyProcessor implements IEntityProcessingService {
     private double moveCooldown = 0;
@@ -57,45 +57,18 @@ public class EnemyProcessor implements IEntityProcessingService {
                 {
                     shotCooldown = 0.3;
 
-                    GameObject bullet = new GameObject();
+                    ServiceLoader.load(BulletSPI.class)
+                            .findFirst()
+                            .ifPresent(spi -> {
 
-                    TransformComponent t = new TransformComponent();
-                    RenderComponent r = new RenderComponent();
-                    VelocityComponent v = new VelocityComponent();
+                                GameObject bullet =
+                                        spi.createBullet(entity, gameData);
 
-                    double rad = Math.toRadians(transform.rotation);
-
-                    double dirX = Math.sin(rad);
-                    double dirY = -Math.cos(rad);
-
-                    double offset = 20;
-                    double speed = 400;
-
-                    // spawn in front of enemy
-                    t.x = transform.x + dirX * offset;
-                    t.y = transform.y + dirY * offset;
-                    t.rotation = transform.rotation;
-
-                    v.dx = dirX * speed;
-                    v.dy = dirY * speed;
-
-                    r.size = 5;
-                    r.color = "BLUE";
-
-                    bullet.addComponent(t);
-                    bullet.addComponent(v);
-                    bullet.addComponent(r);
-                    bullet.addComponent(new BulletTag());
-
-                    toAdd.add(bullet);
+                                if (bullet != null) {
+                                    toAdd.add(bullet);
+                                }
+                            });
                 }
-
-                // screen wrap (Asteroids style)
-                if (transform.x < 0) transform.x = gameData.getDisplayWidth();
-                if (transform.x > gameData.getDisplayWidth()) transform.x = 0;
-
-                if (transform.y < 0) transform.y = gameData.getDisplayHeight();
-                if (transform.y > gameData.getDisplayHeight()) transform.y = 0;
 
                 // optional friction to slow down over time
                 velocity.dx *= friction;

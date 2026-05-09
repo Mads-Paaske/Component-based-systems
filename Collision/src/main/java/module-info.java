@@ -1,4 +1,5 @@
 module Collision {
+    uses dk.sdu.cbse.common.services.AsteroidSplitterSPI;
 
     requires Common;
     requires Engine;

@@ -4,6 +4,9 @@ import dk.sdu.cbse.common.data.GameData;
 import dk.sdu.cbse.common.data.GameWorld;
 import dk.sdu.cbse.common.services.IPostEntityProcessingService;
 import dk.sdu.cbse.engine.*;
+import dk.sdu.cbse.common.services.AsteroidSplitterSPI;
+
+import java.util.ServiceLoader;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,7 +43,13 @@ public class CollisionProcessor implements IPostEntityProcessingService {
 
                     toRemove.add(bullet);
 
-                    splitAsteroid(asteroid, toAdd, toRemove);
+                    ServiceLoader.load(AsteroidSplitterSPI.class)
+                            .findFirst()
+                            .ifPresent(spi -> {
+                                toAdd.addAll(spi.splitAsteroid(asteroid));
+                            });
+
+                    toRemove.add(asteroid);
 
                     System.out.println("Asteroid destroyed!");
                 }
@@ -144,62 +153,5 @@ public class CollisionProcessor implements IPostEntityProcessingService {
         }
 
         return result;
-    }
-
-    private void splitAsteroid(
-            GameObject asteroid,
-            List<GameObject> toAdd,
-            List<GameObject> toRemove
-    ) {
-
-        AsteroidComponent ac =
-                asteroid.getComponent(AsteroidComponent.class);
-
-        toRemove.add(asteroid);
-
-        if (ac == null || ac.level <= 1) {
-            return;
-        }
-
-        TransformComponent t =
-                asteroid.getComponent(TransformComponent.class);
-
-        VelocityComponent v =
-                asteroid.getComponent(VelocityComponent.class);
-
-        RenderComponent r =
-                asteroid.getComponent(RenderComponent.class);
-
-        for (int i = 0; i < 2; i++) {
-
-            GameObject child = new GameObject();
-
-            TransformComponent nt = new TransformComponent();
-            nt.x = t.x;
-            nt.y = t.y;
-
-            VelocityComponent nv = new VelocityComponent();
-            nv.dx = v.dx + (Math.random() - 0.5) * 100;
-            nv.dy = v.dy + (Math.random() - 0.5) * 100;
-
-            RenderComponent nr = new RenderComponent();
-            nr.shape = RenderComponent.Shape.CIRCLE;
-            nr.color = "GRAY";
-            nr.size = r.size * 0.6;
-
-            AsteroidComponent nac = new AsteroidComponent();
-            nac.level = ac.level - 1;
-
-            child.addComponent(nt);
-            child.addComponent(nv);
-            child.addComponent(nr);
-
-            child.addComponent(nac);
-            child.addComponent(new AsteroidTag());
-
-            toAdd.add(child);
-        }
-
-        System.out.println("Asteroid split!");
     }
 }

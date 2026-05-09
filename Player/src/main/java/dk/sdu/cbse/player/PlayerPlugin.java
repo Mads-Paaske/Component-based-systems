@@ -19,6 +19,7 @@ public class PlayerPlugin implements IGamePluginService {
         player.addComponent(transform);
         player.addComponent(new VelocityComponent());
         player.addComponent(new PlayerTag());
+        player.addComponent(new WrapComponent());
         RenderComponent render = new RenderComponent();
         render.shape = RenderComponent.Shape.TRIANGLE;
         render.size = 20;

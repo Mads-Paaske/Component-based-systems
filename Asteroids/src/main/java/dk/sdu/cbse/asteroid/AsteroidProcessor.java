@@ -9,23 +9,5 @@ public class AsteroidProcessor implements IEntityProcessingService {
 
     @Override
     public void process(GameData gameData, GameWorld world) {
-
-        for (GameObject entity : world.getObjects()) {
-
-            if (entity.getComponent(dk.sdu.cbse.engine.AsteroidTag.class) != null) {
-
-                TransformComponent transform = entity.getComponent(TransformComponent.class);
-                VelocityComponent velocity = entity.getComponent(VelocityComponent.class);
-
-                if (transform == null || velocity == null) continue;
-
-                // screen wrap (Asteroids style)
-                if (transform.x < 0) transform.x = gameData.getDisplayWidth();
-                if (transform.x > gameData.getDisplayWidth()) transform.x = 0;
-
-                if (transform.y < 0) transform.y = gameData.getDisplayHeight();
-                if (transform.y > gameData.getDisplayHeight()) transform.y = 0;
-            }
-        }
     }
 }
