@@ -14,9 +14,15 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.stage.Stage;
 
+import java.lang.module.Configuration;
+import java.lang.module.ModuleFinder;
+import java.lang.module.ModuleReference;
+import java.nio.file.Path;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ServiceLoader;
+import java.util.stream.Collectors;
 
 public class GameApp extends Application {
 
@@ -51,9 +57,39 @@ public class GameApp extends Application {
                 e -> gameData.getKeys().release(e.getCode().toString())
         );
 
+        ModuleLayer layer = null;
+
+        try {
+
+            Path pluginsDir = Path.of("plugins");
+
+            ModuleFinder finder = ModuleFinder.of(pluginsDir);
+
+            ModuleLayer parent = ModuleLayer.boot();
+
+            Configuration config = parent.configuration()
+                    .resolve(
+                            finder,
+                            ModuleFinder.of(),
+                            finder.findAll()
+                                    .stream()
+                                    .map(ModuleReference::descriptor)
+                                    .map(descriptor -> descriptor.name())
+                                    .collect(Collectors.toList())
+                    );
+
+            layer = parent.defineModulesWithOneLoader(
+                    config,
+                    ClassLoader.getSystemClassLoader()
+            );
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         // LOAD GAME PLUGINS
         for (IGamePluginService plugin :
-                ServiceLoader.load(IGamePluginService.class)) {
+                ServiceLoader.load(layer, IGamePluginService.class)) {
 
             plugins.add(plugin);
             plugin.start(gameData, gameWorld);
@@ -61,14 +97,14 @@ public class GameApp extends Application {
 
         // LOAD ENTITY PROCESSORS
         for (IEntityProcessingService processor :
-                ServiceLoader.load(IEntityProcessingService.class)) {
+                ServiceLoader.load(layer, IEntityProcessingService.class)) {
 
             processors.add(processor);
         }
 
         // LOAD POST PROCESSORS
         for (IPostEntityProcessingService postProcessor :
-                ServiceLoader.load(IPostEntityProcessingService.class)) {
+                ServiceLoader.load(layer, IPostEntityProcessingService.class)) {
 
             postProcessors.add(postProcessor);
         }
