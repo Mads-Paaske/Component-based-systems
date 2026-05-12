@@ -1,4 +1,4 @@
-package dk.sdu.cbse.player;
+package dk.sdu.cbse.splitpackage;
 
 import dk.sdu.cbse.common.data.GameData;
 import dk.sdu.cbse.common.data.GameWorld;
@@ -10,7 +10,7 @@ import dk.sdu.cbse.engine.components.VelocityComponent;
 import dk.sdu.cbse.engine.components.WrapComponent;
 import dk.sdu.cbse.engine.tags.PlayerTag;
 
-public class PlayerPlugin implements IGamePluginService {
+public class SpaceshipPlugin implements IGamePluginService {
 
     @Override
     public void start(GameData gameData, GameWorld gameWorld) {

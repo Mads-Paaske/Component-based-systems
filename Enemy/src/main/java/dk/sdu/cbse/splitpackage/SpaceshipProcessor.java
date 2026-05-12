@@ -1,4 +1,4 @@
-package dk.sdu.cbse.enemy;
+package dk.sdu.cbse.splitpackage;
 
 import dk.sdu.cbse.common.services.BulletSPI;
 import dk.sdu.cbse.common.data.GameData;
@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ServiceLoader;
 
-public class EnemyProcessor implements IEntityProcessingService {
+public class SpaceshipProcessor implements IEntityProcessingService {
     private double moveCooldown = 0;
     private double shotCooldown = 0;
     private int action = 0;

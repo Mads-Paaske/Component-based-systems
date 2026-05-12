@@ -1,11 +1,14 @@
+import dk.sdu.cbse.splitpackage.SpaceshipPlugin;
+import dk.sdu.cbse.splitpackage.SpaceshipProcessor;
+
 module Enemy {
     requires java.desktop;
     requires Engine;
     requires Common;
 
     provides dk.sdu.cbse.common.services.IGamePluginService
-            with dk.sdu.cbse.enemy.EnemyPlugin;
+            with SpaceshipPlugin;
 
     provides dk.sdu.cbse.common.services.IEntityProcessingService
-            with dk.sdu.cbse.enemy.EnemyProcessor;
+            with SpaceshipProcessor;
 }

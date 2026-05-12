@@ -1,4 +1,4 @@
-package dk.sdu.cbse.enemy;
+package dk.sdu.cbse.splitpackage;
 
 import dk.sdu.cbse.common.data.GameData;
 import dk.sdu.cbse.common.data.GameWorld;
@@ -12,7 +12,7 @@ import dk.sdu.cbse.engine.tags.EnemyTag;
 
 import java.util.Random;
 
-public class EnemyPlugin implements IGamePluginService{
+public class SpaceshipPlugin implements IGamePluginService{
 
     private final Random random = new Random();
     @Override
