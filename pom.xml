@@ -2,6 +2,7 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
                              http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>dk.sdu.cbse</groupId>
@@ -23,39 +24,96 @@
     <module>ScreenWrap</module>
   </modules>
 
+  <!-- ===================== -->
+  <!-- DEPENDENCY VERSIONS   -->
+  <!-- ===================== -->
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <maven.compiler.source>1.9</maven.compiler.source>
-    <maven.compiler.target>1.9</maven.compiler.target>
+    <maven.compiler.source>17</maven.compiler.source>
+    <maven.compiler.target>17</maven.compiler.target>
+
+    <spring.version>6.1.3</spring.version>
+    <javafx.version>21.0.2</javafx.version>
   </properties>
 
+  <!-- ===================== -->
+  <!-- DEPENDENCY MANAGEMENT -->
+  <!-- ===================== -->
   <dependencyManagement>
     <dependencies>
+
+      <!-- JavaFX -->
       <dependency>
         <groupId>org.openjfx</groupId>
         <artifactId>javafx-controls</artifactId>
-        <version>21.0.2</version>
+        <version>${javafx.version}</version>
       </dependency>
+
       <dependency>
         <groupId>org.openjfx</groupId>
         <artifactId>javafx-graphics</artifactId>
-        <version>21.0.2</version>
+        <version>${javafx.version}</version>
       </dependency>
+
       <dependency>
         <groupId>org.openjfx</groupId>
         <artifactId>javafx-base</artifactId>
-        <version>21.0.2</version>
+        <version>${javafx.version}</version>
       </dependency>
+
+      <!-- Spring -->
+      <dependency>
+        <groupId>org.springframework</groupId>
+        <artifactId>spring-context</artifactId>
+        <version>${spring.version}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>org.springframework</groupId>
+        <artifactId>spring-core</artifactId>
+        <version>${spring.version}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>org.springframework</groupId>
+        <artifactId>spring-beans</artifactId>
+        <version>${spring.version}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>org.springframework</groupId>
+        <artifactId>spring-aop</artifactId>
+        <version>${spring.version}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>org.springframework</groupId>
+        <artifactId>spring-expression</artifactId>
+        <version>${spring.version}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>org.springframework</groupId>
+        <artifactId>spring-jcl</artifactId>
+        <version>${spring.version}</version>
+      </dependency>
+
     </dependencies>
   </dependencyManagement>
 
+  <!-- ===================== -->
+  <!-- BUILD                 -->
+  <!-- ===================== -->
   <build>
     <plugins>
+
+      <!-- clean -->
       <plugin>
         <artifactId>maven-clean-plugin</artifactId>
         <version>3.2.0</version>
       </plugin>
 
+      <!-- compile -->
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
         <version>3.10.1</version>
@@ -64,96 +122,64 @@
         </configuration>
       </plugin>
 
+      <!-- build jars into mods-mvn -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-jar-plugin</artifactId>
-        <version>3.3.0</version> <configuration>
-        <outputDirectory>${maven.multiModuleProjectDirectory}/mods-mvn</outputDirectory>
-      </configuration>
+        <version>3.3.0</version>
+        <configuration>
+          <outputDirectory>${maven.multiModuleProjectDirectory}/mods-mvn</outputDirectory>
+        </configuration>
       </plugin>
 
+      <!-- copy dependencies (THIS IS CRITICAL FOR SPRING) -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <version>3.6.1</version>
+        <executions>
+          <execution>
+            <id>copy-dependencies</id>
+            <phase>install</phase>
+            <goals>
+              <goal>copy-dependencies</goal>
+            </goals>
+
+            <configuration>
+              <outputDirectory>${maven.multiModuleProjectDirectory}/mods-mvn</outputDirectory>
+              <includeScope>runtime</includeScope>
+            </configuration>
+
+          </execution>
+        </executions>
+      </plugin>
+
+      <!-- run app -->
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>exec-maven-plugin</artifactId>
         <version>3.1.0</version>
+
         <configuration>
           <executable>java</executable>
+
           <arguments>
+
             <argument>--module-path=mods-mvn</argument>
             <argument>--module=Game/dk.sdu.cbse.game.GameApp</argument>
-            <argument>--add-modules=javafx.graphics</argument>
+
+            <argument>
+              --add-modules=javafx.graphics,javafx.controls,
+              spring.context,spring.beans,spring.core,
+              spring.aop,spring.expression,spring.jcl
+            </argument>
+
           </arguments>
         </configuration>
+
       </plugin>
+
     </plugins>
   </build>
 
-  <profiles>
-    <profile>
-      <id>parent-project</id>
-      <activation>
-        <file>
-          <missing>src</missing>
-        </file>
-      </activation>
-      <build>
-        <plugins>
-          <plugin>
-            <artifactId>maven-clean-plugin</artifactId>
-            <version>3.2.0</version>
-            <configuration>
-              <filesets>
-                <fileset>
-                  <directory>mods-mvn</directory>
-                </fileset>
-                <fileset>
-                  <directory>libs</directory>
-                </fileset>
-              </filesets>
-            </configuration>
-          </plugin>
-        </plugins>
-      </build>
-    </profile>
-
-    <profile>
-      <id>child-project</id>
-      <activation>
-        <file>
-          <exists>src</exists>
-        </file>
-      </activation>
-      <build>
-        <plugins>
-          <plugin>
-            <groupId>org.codehaus.mojo</groupId>
-            <artifactId>exec-maven-plugin</artifactId>
-            <version>3.1.0</version>
-            <executions>
-              <execution>
-                <goals>
-                  <goal>java</goal>
-                </goals>
-              </execution>
-            </executions>
-            <configuration>
-              <mainClass>dk.sdu.cbse.game.GameApp</mainClass>
-              <cleanupDaemonThreads>false</cleanupDaemonThreads>
-              <classpathScope>compile</classpathScope>
-              <includePluginDependencies>true</includePluginDependencies>
-              <additionalClasspathElements>
-                <additionalClasspathElement>${project.basedir}/Game/target/classes</additionalClasspathElement>
-              </additionalClasspathElements>
-              <arguments>
-                <argument>--module-path</argument>
-                <argument>${project.basedir}/mods-mvn</argument>
-                <argument>--add-modules</argument>
-                <argument>javafx.controls,javafx.graphics</argument>
-              </arguments>
-            </configuration>
-          </plugin>
-        </plugins>
-      </build>
-    </profile>
-  </profiles>
 </project>
