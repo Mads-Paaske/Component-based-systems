@@ -1,5 +1,5 @@
 module Enemy {
-    requires java.desktop;
+    uses dk.sdu.cbse.common.services.BulletSPI;
     requires Engine;
     requires Common;
 
