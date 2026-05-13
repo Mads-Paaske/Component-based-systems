@@ -103,12 +103,20 @@
         <groupId>org.junit.jupiter</groupId>
         <artifactId>junit-jupiter</artifactId>
         <scope>test</scope>
+        <version>6.0.3</version>
       </dependency>
 
       <!-- Mockito -->
       <dependency>
         <groupId>org.mockito</groupId>
         <artifactId>mockito-core</artifactId>
+        <scope>test</scope>
+        <version>5.23.0</version>
+      </dependency>
+
+      <dependency>
+        <groupId>org.mockito</groupId>
+        <artifactId>mockito-junit-jupiter</artifactId>
         <scope>test</scope>
         <version>5.23.0</version>
       </dependency>
