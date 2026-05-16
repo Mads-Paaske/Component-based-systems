@@ -11,6 +11,8 @@ public class GameData {
 
     private Keys keys = new Keys();
 
+    private int score = 0;
+
     private GraphicsContext gc;
 
     public double getDelta() {
@@ -38,4 +40,8 @@ public class GameData {
     }
 
     public Keys getKeys() { return keys; }
+
+    public int getScore() { return score; }
+
+    public void addScore(int points) { score += points; }
 }

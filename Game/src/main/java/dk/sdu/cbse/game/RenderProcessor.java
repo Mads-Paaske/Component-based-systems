@@ -13,6 +13,9 @@ public class RenderProcessor {
     public void render(GameData gameData, GameWorld world) {
         GraphicsContext gc = gameData.getGraphicsContext();
         gc.clearRect(0, 0, gameData.getDisplayWidth(), gameData.getDisplayHeight());
+        gc.setFill(Paint.valueOf("BLACK"));
+        gc.setFont(javafx.scene.text.Font.font("Arial", 20));
+        gc.fillText("Score: " + gameData.getScore(), 10, 25);
 
         for (GameObject entity : world.getObjects()) {
 

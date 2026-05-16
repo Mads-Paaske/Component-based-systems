@@ -6,6 +6,7 @@ import dk.sdu.cbse.common.services.IPostEntityProcessingService;
 import dk.sdu.cbse.engine.*;
 import dk.sdu.cbse.common.services.AsteroidSplitterSPI;
 import dk.sdu.cbse.engine.components.Component;
+import dk.sdu.cbse.engine.components.OwnerComponent;
 import dk.sdu.cbse.engine.components.RenderComponent;
 import dk.sdu.cbse.engine.components.TransformComponent;
 import dk.sdu.cbse.engine.tags.AsteroidTag;
@@ -19,6 +20,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CollisionProcessor implements IPostEntityProcessingService {
+
+    private final ScoringClient scoringClient = new ScoringClient();
 
     @Override
     public void process(GameData gameData, GameWorld world) {
@@ -42,12 +45,17 @@ public class CollisionProcessor implements IPostEntityProcessingService {
             }
         }
 
-        // Bullet vs Asteroid
+        //Bullet vs Asteroid
         for (GameObject bullet : bullets) {
             for (GameObject asteroid : asteroids) {
 
                 if (collides(bullet, asteroid)) {
 
+                    OwnerComponent owner = bullet.getComponent(OwnerComponent.class);
+                    if (owner != null && owner.ownerType == OwnerComponent.OwnerType.PLAYER) {
+                        gameData.addScore(100);
+                        scoringClient.reportScore("Player", gameData.getScore());
+                    }
                     toRemove.add(bullet);
 
                     ServiceLoader.load(AsteroidSplitterSPI.class)
@@ -68,6 +76,12 @@ public class CollisionProcessor implements IPostEntityProcessingService {
             for (GameObject enemy : enemies) {
 
                 if (collides(bullet, enemy)) {
+
+                    OwnerComponent owner = bullet.getComponent(OwnerComponent.class);
+                    if (owner != null && owner.ownerType == OwnerComponent.OwnerType.PLAYER) {
+                        gameData.addScore(250);
+                        scoringClient.reportScore("Player", gameData.getScore());
+                    }
 
                     toRemove.add(bullet);
                     toRemove.add(enemy);

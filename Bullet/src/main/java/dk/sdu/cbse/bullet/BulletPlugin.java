@@ -6,7 +6,11 @@ import dk.sdu.cbse.engine.*;
 import dk.sdu.cbse.engine.components.RenderComponent;
 import dk.sdu.cbse.engine.components.TransformComponent;
 import dk.sdu.cbse.engine.components.VelocityComponent;
+import dk.sdu.cbse.engine.components.OwnerComponent;
 import dk.sdu.cbse.engine.tags.BulletTag;
+import dk.sdu.cbse.engine.tags.EnemyTag;
+import dk.sdu.cbse.engine.tags.PlayerTag;
+
 
 public class BulletPlugin implements BulletSPI {
 
@@ -51,6 +55,15 @@ public class BulletPlugin implements BulletSPI {
         bullet.addComponent(v);
         bullet.addComponent(r);
         bullet.addComponent(new BulletTag());
+
+        //
+        OwnerComponent owner = new OwnerComponent();
+        if (shooter.getComponent(PlayerTag.class) != null) {
+            owner.ownerType = OwnerComponent.OwnerType.PLAYER;
+        } else if (shooter.getComponent(EnemyTag.class) != null) {
+            owner.ownerType = OwnerComponent.OwnerType.ENEMY;
+        }
+        bullet.addComponent(owner);
 
         return bullet;
     }

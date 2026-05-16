@@ -22,6 +22,7 @@
     <module>Enemy</module>
     <module>Movement</module>
     <module>ScreenWrap</module>
+    <module>ScoringService</module>
   </modules>
 
   <!-- ===================== -->
@@ -41,6 +42,14 @@
   <!-- ===================== -->
   <dependencyManagement>
     <dependencies>
+
+      <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-dependencies</artifactId>
+        <version>3.2.2</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
 
       <!-- JavaFX -->
       <dependency>
@@ -119,6 +128,18 @@
         <artifactId>mockito-junit-jupiter</artifactId>
         <scope>test</scope>
         <version>5.23.0</version>
+      </dependency>
+
+      <!-- ByteBuddy (explicitly declaring fixes some java version errors)-->
+      <dependency>
+        <groupId>net.bytebuddy</groupId>
+        <artifactId>byte-buddy</artifactId>
+        <version>1.15.10</version>
+      </dependency>
+      <dependency>
+        <groupId>net.bytebuddy</groupId>
+        <artifactId>byte-buddy-agent</artifactId>
+        <version>1.15.10</version>
       </dependency>
 
     </dependencies>
@@ -200,6 +221,12 @@
           </arguments>
         </configuration>
 
+      </plugin>
+
+      <plugin>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-maven-plugin</artifactId>
+        <version>3.2.2</version>
       </plugin>
 
     </plugins>
