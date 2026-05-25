@@ -1,12 +1,12 @@
 package dk.sdu.cbse.asteroid;
 
 import dk.sdu.cbse.common.services.AsteroidSplitterSPI;
-import dk.sdu.cbse.engine.*;
 import dk.sdu.cbse.engine.components.AsteroidComponent;
 import dk.sdu.cbse.engine.components.RenderComponent;
 import dk.sdu.cbse.engine.components.TransformComponent;
 import dk.sdu.cbse.engine.components.VelocityComponent;
 import dk.sdu.cbse.engine.tags.AsteroidTag;
+import dk.sdu.cbse.common.data.GameObject;
 
 import java.util.ArrayList;
 import java.util.List;

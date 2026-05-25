@@ -1,8 +1,6 @@
 package dk.sdu.cbse.common.data;
 
 
-import dk.sdu.cbse.engine.GameObject;
-import javafx.scene.canvas.GraphicsContext;
 import java.util.ArrayList;
 import java.util.List;
 

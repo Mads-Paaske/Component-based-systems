@@ -1,6 +1,6 @@
-package dk.sdu.cbse.engine;
+package dk.sdu.cbse.common.data;
 
-import dk.sdu.cbse.engine.components.Component;
+import dk.sdu.cbse.common.services.Component;
 
 import java.util.ArrayList;
 import java.util.List;

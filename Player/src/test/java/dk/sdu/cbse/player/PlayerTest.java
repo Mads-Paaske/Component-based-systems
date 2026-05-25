@@ -3,7 +3,7 @@ package dk.sdu.cbse.player;
 import dk.sdu.cbse.common.data.GameData;
 import dk.sdu.cbse.common.data.GameWorld;
 import dk.sdu.cbse.common.data.Keys;
-import dk.sdu.cbse.engine.GameObject;
+import dk.sdu.cbse.common.data.GameObject;
 import dk.sdu.cbse.engine.components.TransformComponent;
 import dk.sdu.cbse.engine.components.VelocityComponent;
 import dk.sdu.cbse.engine.tags.PlayerTag;

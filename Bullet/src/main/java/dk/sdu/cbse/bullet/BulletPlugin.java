@@ -2,7 +2,6 @@ package dk.sdu.cbse.bullet;
 
 import dk.sdu.cbse.common.data.GameData;
 import dk.sdu.cbse.common.services.BulletSPI;
-import dk.sdu.cbse.engine.*;
 import dk.sdu.cbse.engine.components.RenderComponent;
 import dk.sdu.cbse.engine.components.TransformComponent;
 import dk.sdu.cbse.engine.components.VelocityComponent;
@@ -10,6 +9,7 @@ import dk.sdu.cbse.engine.components.OwnerComponent;
 import dk.sdu.cbse.engine.tags.BulletTag;
 import dk.sdu.cbse.engine.tags.EnemyTag;
 import dk.sdu.cbse.engine.tags.PlayerTag;
+import dk.sdu.cbse.common.data.GameObject;
 
 
 public class BulletPlugin implements BulletSPI {

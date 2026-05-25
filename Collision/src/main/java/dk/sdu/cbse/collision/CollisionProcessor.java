@@ -3,9 +3,8 @@ package dk.sdu.cbse.collision;
 import dk.sdu.cbse.common.data.GameData;
 import dk.sdu.cbse.common.data.GameWorld;
 import dk.sdu.cbse.common.services.IPostEntityProcessingService;
-import dk.sdu.cbse.engine.*;
 import dk.sdu.cbse.common.services.AsteroidSplitterSPI;
-import dk.sdu.cbse.engine.components.Component;
+import dk.sdu.cbse.common.services.Component;
 import dk.sdu.cbse.engine.components.OwnerComponent;
 import dk.sdu.cbse.engine.components.RenderComponent;
 import dk.sdu.cbse.engine.components.TransformComponent;
@@ -13,6 +12,8 @@ import dk.sdu.cbse.engine.tags.AsteroidTag;
 import dk.sdu.cbse.engine.tags.BulletTag;
 import dk.sdu.cbse.engine.tags.EnemyTag;
 import dk.sdu.cbse.engine.tags.PlayerTag;
+import dk.sdu.cbse.common.data.GameObject;
+
 
 import java.util.ServiceLoader;
 
@@ -41,6 +42,14 @@ public class CollisionProcessor implements IPostEntityProcessingService {
                 if (collides(player, asteroid)) {
                     toRemove.add(player);
                     System.out.println("Player died!");
+
+                    ServiceLoader.load(AsteroidSplitterSPI.class)
+                            .findFirst()
+                            .ifPresent(spi -> {
+                                toAdd.addAll(spi.splitAsteroid(asteroid));
+                            });
+
+                    toRemove.add(asteroid);
                 }
             }
         }

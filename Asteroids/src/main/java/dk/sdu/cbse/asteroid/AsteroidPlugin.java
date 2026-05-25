@@ -2,8 +2,8 @@ package dk.sdu.cbse.asteroid;
 
 import dk.sdu.cbse.common.data.GameData;
 import dk.sdu.cbse.common.data.GameWorld;
+import dk.sdu.cbse.common.data.GameObject;
 import dk.sdu.cbse.common.services.IGamePluginService;
-import dk.sdu.cbse.engine.*;
 import dk.sdu.cbse.engine.components.*;
 import dk.sdu.cbse.engine.tags.AsteroidTag;
 

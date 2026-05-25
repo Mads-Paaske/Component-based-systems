@@ -3,7 +3,6 @@ package dk.sdu.cbse.asteroid;
 import dk.sdu.cbse.common.data.GameData;
 import dk.sdu.cbse.common.data.GameWorld;
 import dk.sdu.cbse.common.services.IEntityProcessingService;
-import dk.sdu.cbse.engine.*;
 
 public class AsteroidProcessor implements IEntityProcessingService {
 

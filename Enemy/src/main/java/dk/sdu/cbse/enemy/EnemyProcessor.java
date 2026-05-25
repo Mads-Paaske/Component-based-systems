@@ -4,7 +4,7 @@ import dk.sdu.cbse.common.services.BulletSPI;
 import dk.sdu.cbse.common.data.GameData;
 import dk.sdu.cbse.common.data.GameWorld;
 import dk.sdu.cbse.common.services.IEntityProcessingService;
-import dk.sdu.cbse.engine.GameObject;
+import dk.sdu.cbse.common.data.GameObject;
 import dk.sdu.cbse.engine.components.TransformComponent;
 import dk.sdu.cbse.engine.components.VelocityComponent;
 import dk.sdu.cbse.engine.tags.EnemyTag;

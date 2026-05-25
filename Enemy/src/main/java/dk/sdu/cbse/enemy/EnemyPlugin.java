@@ -3,7 +3,6 @@ package dk.sdu.cbse.enemy;
 import dk.sdu.cbse.common.data.GameData;
 import dk.sdu.cbse.common.data.GameWorld;
 import dk.sdu.cbse.common.services.IGamePluginService;
-import dk.sdu.cbse.engine.*;
 import dk.sdu.cbse.engine.components.RenderComponent;
 import dk.sdu.cbse.engine.components.TransformComponent;
 import dk.sdu.cbse.engine.components.VelocityComponent;
@@ -17,7 +16,7 @@ public class EnemyPlugin implements IGamePluginService{
     private final Random random = new Random();
     @Override
     public void start(GameData gameData, GameWorld gameWorld) {
-        GameObject enemy = new GameObject();
+        dk.sdu.cbse.common.data.GameObject enemy = new dk.sdu.cbse.common.data.GameObject();
 
         VelocityComponent velocityComponent = new VelocityComponent();
         velocityComponent.dx = random.nextDouble() * 100 - 50;

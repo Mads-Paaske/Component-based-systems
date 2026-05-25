@@ -2,7 +2,7 @@ package dk.sdu.cbse.game;
 
 import dk.sdu.cbse.common.data.GameData;
 import dk.sdu.cbse.common.data.GameWorld;
-import dk.sdu.cbse.engine.GameObject;
+import dk.sdu.cbse.common.data.GameObject;
 import dk.sdu.cbse.engine.components.RenderComponent;
 import dk.sdu.cbse.engine.components.TransformComponent;
 import javafx.scene.canvas.GraphicsContext;
