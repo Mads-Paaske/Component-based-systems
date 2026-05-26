@@ -5,13 +5,14 @@ import dk.sdu.cbse.common.data.GameWorld;
 import dk.sdu.cbse.common.services.IEntityProcessingService;
 import dk.sdu.cbse.engine.components.TransformComponent;
 import dk.sdu.cbse.engine.components.WrapComponent;
+import dk.sdu.cbse.common.data.GameObject;
 
 public class WrapProcessor implements IEntityProcessingService {
 
     @Override
     public void process(GameData gameData, GameWorld world) {
 
-        for (dk.sdu.cbse.common.data.GameObject entity : world.getObjects()) {
+        for (GameObject entity : world.getObjects()) {
 
             if (entity.getComponent(WrapComponent.class) == null) {
                 continue;
