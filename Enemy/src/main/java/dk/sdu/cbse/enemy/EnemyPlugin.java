@@ -8,6 +8,7 @@ import dk.sdu.cbse.engine.components.TransformComponent;
 import dk.sdu.cbse.engine.components.VelocityComponent;
 import dk.sdu.cbse.engine.components.WrapComponent;
 import dk.sdu.cbse.engine.tags.EnemyTag;
+import dk.sdu.cbse.common.data.GameObject;
 
 import java.util.Random;
 
@@ -16,7 +17,7 @@ public class EnemyPlugin implements IGamePluginService{
     private final Random random = new Random();
     @Override
     public void start(GameData gameData, GameWorld gameWorld) {
-        dk.sdu.cbse.common.data.GameObject enemy = new dk.sdu.cbse.common.data.GameObject();
+        GameObject enemy = new GameObject();
 
         VelocityComponent velocityComponent = new VelocityComponent();
         velocityComponent.dx = random.nextDouble() * 100 - 50;

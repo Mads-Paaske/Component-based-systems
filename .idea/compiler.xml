@@ -21,6 +21,9 @@
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="Core" target="17" />
+      <module name="Movement" target="17" />
+      <module name="ScoringService" target="17" />
+      <module name="ScreenWrap" target="17" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
