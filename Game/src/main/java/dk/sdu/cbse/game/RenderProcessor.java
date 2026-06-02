@@ -7,6 +7,9 @@ import dk.sdu.cbse.engine.components.RenderComponent;
 import dk.sdu.cbse.engine.components.TransformComponent;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Paint;
+import dk.sdu.cbse.engine.components.HealthComponent;
+import dk.sdu.cbse.engine.tags.EnemyTag;
+import dk.sdu.cbse.engine.tags.PlayerTag;
 
 public class RenderProcessor {
 
@@ -44,7 +47,51 @@ public class RenderProcessor {
                 }
 
                 gc.restore();
+
+                if (entity.getComponent(EnemyTag.class) != null) {
+                    HealthComponent health = entity.getComponent(HealthComponent.class);
+                    if (health != null && transform != null) {
+                        double barWidth = 40;
+                        double barHeight = 6;
+                        double barX = transform.x - barWidth / 2;
+                        double barY = transform.y - render.size - 12;
+                        double healthRatio = (double) health.currentHealth / health.maxHealth;
+
+                        // background bar
+                        gc.setFill(Paint.valueOf("RED"));
+                        gc.fillRect(barX, barY, barWidth, barHeight);
+
+                        // foreground bar
+                        gc.setFill(Paint.valueOf("GREEN"));
+                        gc.fillRect(barX, barY, barWidth * healthRatio, barHeight);
+                    }
+                }
             }
         }
+
+        // Draw player health bar near score
+        for (GameObject entity : world.getObjects()) {
+            if (entity.getComponent(PlayerTag.class) != null) {
+                HealthComponent health = entity.getComponent(HealthComponent.class);
+                if (health != null) {
+                    double barWidth = 100;
+                    double barHeight = 10;
+                    double barX = 10;
+                    double barY = 35;
+                    double healthRatio = (double) health.currentHealth / health.maxHealth;
+
+                    gc.setFill(Paint.valueOf("RED"));
+                    gc.fillRect(barX, barY, barWidth, barHeight);
+
+                    gc.setFill(Paint.valueOf("GREEN"));
+                    gc.fillRect(barX, barY, barWidth * healthRatio, barHeight);
+
+                    gc.setFill(Paint.valueOf("WHITE"));
+                    gc.fillText("Health", barX, barY - 2);
+                }
+                break;
+            }
+        }
+
     }
 }

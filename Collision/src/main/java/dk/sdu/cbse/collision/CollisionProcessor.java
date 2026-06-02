@@ -5,6 +5,7 @@ import dk.sdu.cbse.common.data.GameWorld;
 import dk.sdu.cbse.common.services.IPostEntityProcessingService;
 import dk.sdu.cbse.common.services.AsteroidSplitterSPI;
 import dk.sdu.cbse.common.services.Component;
+import dk.sdu.cbse.engine.components.HealthComponent;
 import dk.sdu.cbse.engine.components.OwnerComponent;
 import dk.sdu.cbse.engine.components.RenderComponent;
 import dk.sdu.cbse.engine.components.TransformComponent;
@@ -35,13 +36,31 @@ public class CollisionProcessor implements IPostEntityProcessingService {
         List<GameObject> asteroids = getEntities(world, AsteroidTag.class);
         List<GameObject> enemies = getEntities(world, EnemyTag.class);
 
+        for (GameObject entity : world.getObjects()) {
+            HealthComponent health = entity.getComponent(HealthComponent.class);
+            if (health != null && health.iframeTimer > 0) {
+                health.iframeTimer -= (float) gameData.getDelta();
+            }
+        }
+
         // Player vs Asteroid
         for (GameObject player : players) {
             for (GameObject asteroid : asteroids) {
 
                 if (collides(player, asteroid)) {
-                    toRemove.add(player);
-                    System.out.println("Player died!");
+
+                    HealthComponent playerHealth = player.getComponent(HealthComponent.class);
+
+                    if (playerHealth != null && playerHealth.iframeTimer <= 0) {
+                        playerHealth.currentHealth -= 1;
+                        playerHealth.iframeTimer = 1.5f; // 1.5 seconds of iframes
+
+                        if (playerHealth.currentHealth <= 0) {
+                            toRemove.add(player);
+                            System.out.println("Player died!");
+
+                        }
+                    }
 
                     ServiceLoader.load(AsteroidSplitterSPI.class)
                             .findFirst()
@@ -87,15 +106,21 @@ public class CollisionProcessor implements IPostEntityProcessingService {
                 if (collides(bullet, enemy)) {
 
                     OwnerComponent owner = bullet.getComponent(OwnerComponent.class);
-                    if (owner != null && owner.ownerType == OwnerComponent.OwnerType.PLAYER) {
-                        gameData.addScore(250);
-                        scoringClient.reportScore("Player", gameData.getScore());
-                    }
 
                     toRemove.add(bullet);
-                    toRemove.add(enemy);
 
-                    System.out.println("Enemy destroyed!");
+                    HealthComponent enemyHealth = enemy.getComponent(HealthComponent.class);
+                    enemyHealth.currentHealth = enemyHealth.currentHealth - 1;
+
+                    if (enemyHealth.currentHealth == 0)
+                    {
+                        if (owner != null && owner.ownerType == OwnerComponent.OwnerType.PLAYER) {
+                            gameData.addScore(250);
+                            scoringClient.reportScore("Player", gameData.getScore());
+                        }
+                        toRemove.add(enemy);
+                        System.out.println("Enemy destroyed!");
+                    }
                 }
             }
         }
@@ -107,9 +132,18 @@ public class CollisionProcessor implements IPostEntityProcessingService {
                 if (collides(bullet, player)) {
 
                     toRemove.add(bullet);
-                    toRemove.add(player);
 
-                    System.out.println("Player destroyed!");
+                    HealthComponent playerHealth = player.getComponent(HealthComponent.class);
+
+                    if (playerHealth != null && playerHealth.iframeTimer <= 0) {
+                        playerHealth.currentHealth -= 1;
+                        playerHealth.iframeTimer = 1.5f; // 1.5 seconds of iframes
+
+                        if (playerHealth.currentHealth <= 0) {
+                            toRemove.add(player);
+                            System.out.println("Player died!");
+                        }
+                    }
                 }
             }
         }
@@ -119,19 +153,16 @@ public class CollisionProcessor implements IPostEntityProcessingService {
             for (GameObject enemy : enemies) {
 
                 if (collides(player, enemy)) {
-                    toRemove.add(player);
-                    System.out.println("Player died!");
-                }
-            }
-        }
+                    HealthComponent playerHealth = player.getComponent(HealthComponent.class);
 
-        // Asteroid vs Enemy
-        for (GameObject asteroid : asteroids) {
-            for (GameObject enemy : enemies) {
+                    if (playerHealth != null && playerHealth.iframeTimer <= 0) {
+                        playerHealth.currentHealth -= 1;
+                        playerHealth.iframeTimer = 1.5f; // 1.5 seconds of iframes
 
-                if (collides(asteroid, enemy)) {
-                    toRemove.add(asteroid);
-                    System.out.println("Player died!");
+                        if (playerHealth.currentHealth <= 0) {
+                            toRemove.add(player);
+                        }
+                    }
                 }
             }
         }

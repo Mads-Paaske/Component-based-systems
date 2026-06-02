@@ -3,10 +3,7 @@ package dk.sdu.cbse.enemy;
 import dk.sdu.cbse.common.data.GameData;
 import dk.sdu.cbse.common.data.GameWorld;
 import dk.sdu.cbse.common.services.IGamePluginService;
-import dk.sdu.cbse.engine.components.RenderComponent;
-import dk.sdu.cbse.engine.components.TransformComponent;
-import dk.sdu.cbse.engine.components.VelocityComponent;
-import dk.sdu.cbse.engine.components.WrapComponent;
+import dk.sdu.cbse.engine.components.*;
 import dk.sdu.cbse.engine.tags.EnemyTag;
 import dk.sdu.cbse.common.data.GameObject;
 
@@ -39,6 +36,7 @@ public class EnemyPlugin implements IGamePluginService{
         enemy.addComponent(transformComponent);
         enemy.addComponent(renderComponent);
         enemy.addComponent(new WrapComponent());
+        enemy.addComponent(new HealthComponent(3));
 
         enemy.addComponent(new EnemyTag());
 
