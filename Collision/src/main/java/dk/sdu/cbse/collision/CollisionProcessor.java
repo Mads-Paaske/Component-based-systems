@@ -59,14 +59,13 @@ public class CollisionProcessor implements IPostEntityProcessingService {
                             toRemove.add(player);
                             System.out.println("Player died!");
 
+                            ServiceLoader.load(AsteroidSplitterSPI.class)
+                                    .findFirst()
+                                    .ifPresent(spi -> {
+                                        toAdd.addAll(spi.splitAsteroid(asteroid));
+                                    });
                         }
                     }
-
-                    ServiceLoader.load(AsteroidSplitterSPI.class)
-                            .findFirst()
-                            .ifPresent(spi -> {
-                                toAdd.addAll(spi.splitAsteroid(asteroid));
-                            });
 
                     toRemove.add(asteroid);
                 }
