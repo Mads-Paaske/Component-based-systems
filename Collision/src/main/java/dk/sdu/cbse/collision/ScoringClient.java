@@ -7,17 +7,19 @@ import org.springframework.http.MediaType;
 
 public class ScoringClient {
 
+
+    private int score = 0;
     private final RestTemplate restTemplate = new RestTemplate();
     private final String scoringServiceUrl = "http://localhost:8080/scores";
 
-    public void reportScore(String playerName, int points) {
+    public void reportScore(String playerName) {
         try {
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_JSON);
 
             String body = String.format(
                     "{\"playerName\":\"%s\",\"score\":%d}",
-                    playerName, points
+                    playerName, score
             );
 
             HttpEntity<String> request = new HttpEntity<>(body, headers);
@@ -27,5 +29,13 @@ public class ScoringClient {
             // If the scoring service is down, the game should still work
             System.out.println("Scoring service unavailable: " + e.getMessage());
         }
+
+        // Reset the score for the next game
+        score = 0;
+    }
+
+    public void updateScore(int points)
+    {
+        score = points + score;
     }
 }

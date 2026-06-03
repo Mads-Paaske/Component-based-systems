@@ -58,14 +58,15 @@ public class CollisionProcessor implements IPostEntityProcessingService {
                         if (playerHealth.currentHealth <= 0) {
                             toRemove.add(player);
                             System.out.println("Player died!");
-
-                            ServiceLoader.load(AsteroidSplitterSPI.class)
-                                    .findFirst()
-                                    .ifPresent(spi -> {
-                                        toAdd.addAll(spi.splitAsteroid(asteroid));
-                                    });
+                            scoringClient.reportScore("Player");
                         }
                     }
+
+                    ServiceLoader.load(AsteroidSplitterSPI.class)
+                            .findFirst()
+                            .ifPresent(spi -> {
+                                toAdd.addAll(spi.splitAsteroid(asteroid));
+                            });
 
                     toRemove.add(asteroid);
                 }
@@ -81,7 +82,7 @@ public class CollisionProcessor implements IPostEntityProcessingService {
                     OwnerComponent owner = bullet.getComponent(OwnerComponent.class);
                     if (owner != null && owner.ownerType == OwnerComponent.OwnerType.PLAYER) {
                         gameData.addScore(100);
-                        scoringClient.reportScore("Player", gameData.getScore());
+                        scoringClient.updateScore(gameData.getScore());
                     }
                     toRemove.add(bullet);
 
@@ -115,7 +116,7 @@ public class CollisionProcessor implements IPostEntityProcessingService {
                     {
                         if (owner != null && owner.ownerType == OwnerComponent.OwnerType.PLAYER) {
                             gameData.addScore(250);
-                            scoringClient.reportScore("Player", gameData.getScore());
+                            scoringClient.updateScore(gameData.getScore());
                         }
                         toRemove.add(enemy);
                         System.out.println("Enemy destroyed!");
@@ -141,6 +142,7 @@ public class CollisionProcessor implements IPostEntityProcessingService {
                         if (playerHealth.currentHealth <= 0) {
                             toRemove.add(player);
                             System.out.println("Player died!");
+                            scoringClient.reportScore("Player");
                         }
                     }
                 }
@@ -160,6 +162,7 @@ public class CollisionProcessor implements IPostEntityProcessingService {
 
                         if (playerHealth.currentHealth <= 0) {
                             toRemove.add(player);
+                            scoringClient.reportScore("Player");
                         }
                     }
                 }
