@@ -36,6 +36,6 @@ public class ScoringClient {
 
     public void updateScore(int points)
     {
-        score = points + score;
+        score = points;
     }
 }
